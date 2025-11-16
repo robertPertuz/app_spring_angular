@@ -1,0 +1,11 @@
+<div class="container">
+	<h1>Sistema de Gestión de Productos</h1>
+
+	<div class="notification-container" *ngIf="notification$ | async as notif">
+		<div class="notification" [ngClass]="'notification-' + notif.type">
+			{{ notif.message }}
+		</div>
+	</div>
+
+	<router-outlet></router-outlet>
+</div>

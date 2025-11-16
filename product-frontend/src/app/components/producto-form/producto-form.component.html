@@ -1,0 +1,43 @@
+<form [formGroup]="form" (ngSubmit)="enviar()" class="producto-form">
+  <div class="grid">
+    <div class="fields">
+      <div class="field">
+        <label for="nombre">Nombre</label>
+        <input id="nombre" formControlName="nombre" />
+        <div class="error" *ngIf="form.get('nombre')?.touched && form.get('nombre')?.hasError('required')">
+          @if (form.get('nombre')?.hasError('required')) { <span>El nombre es obligatorio</span> }
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="precio">Precio</label>
+        <input id="precio" formControlName="precio" type="number" step="0.01" />
+        <div class="error" *ngIf="form.get('precio')?.touched && form.get('precio')?.hasError('required')">
+          @if (form.get('precio')?.hasError('required')) { <span>El precio es obligatorio</span> }
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="imagenUrl">URL de la imagen</label>
+        <input id="imagenUrl" formControlName="imagenUrl" />
+        <div class="error" *ngIf="form.get('imagenUrl')?.touched && form.get('imagenUrl')?.hasError('required')">
+          @if (form.get('imagenUrl')?.hasError('required')) { <span>La URL de la imagen es obligatoria</span> }
+        </div>
+      </div>
+
+      <div class="actions">
+        <button type="submit" [disabled]="form.invalid || cargando">
+          {{ cargando ? 'Guardando...' : 'Enviar' }}
+        </button>
+        <button type="button" class="secondary" (click)="cancelar()" [disabled]="cargando">Cancelar</button>
+      </div>
+    </div>
+
+    <div class="preview">
+      <div class="preview-box">
+        <p class="preview-label">Vista previa</p>
+        <img [src]="form.get('imagenUrl')?.value || 'https://picsum.photos/seed/placeholder/400/300'" alt="Preview" />
+      </div>
+    </div>
+  </div>
+</form>

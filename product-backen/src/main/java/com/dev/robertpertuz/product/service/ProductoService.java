@@ -3,6 +3,7 @@ package com.dev.robertpertuz.product.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
 import com.dev.robertpertuz.product.model.Producto;
@@ -21,15 +22,15 @@ public class ProductoService {
 		return productoRepository.findAll();
 	}
 
-	public Optional<Producto> findById(Long id) {
+	public Optional<Producto> findById(@NonNull Long id) {
 		return productoRepository.findById(id);
 	}
 
-	public Producto save(Producto producto) {
+	public Producto save(@NonNull Producto producto) {
 		return productoRepository.save(producto);
 	}
 
-	public void deleteById(Long id) {
+	public void deleteById(@NonNull Long id) {
 		productoRepository.deleteById(id);
 	}
 }

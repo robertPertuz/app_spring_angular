@@ -1,0 +1,11 @@
+<section class="producto-list">
+  <h2>Productos</h2>
+  <div class="actions">
+    <button class="btn btn-primary" (click)="navigateToCreate()">+ Nuevo producto</button>
+  </div>
+  <div class="lista-grid">
+    <ng-container *ngFor="let producto of productos$ | async">
+      <app-producto-card [producto]="producto"></app-producto-card>
+    </ng-container>
+  </div>
+</section>

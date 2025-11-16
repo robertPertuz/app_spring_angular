@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,36 +29,40 @@ public class ProductoController {
 
 	@GetMapping
 	public ResponseEntity<List<Producto>> getAllProductos() {
-		List<Producto> productos = productoService.findAll();
-		return ResponseEntity.ok(productos);
+		return ResponseEntity.ok(productoService.findAll());
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<Producto> getProductoById(@PathVariable Long id) {
+	public ResponseEntity<Producto> getProductoById(@PathVariable @NonNull Long id) {
 		return productoService.findById(id)
-				.map(producto -> ResponseEntity.ok(producto))
+				.map(ResponseEntity::ok)
 				.orElse(ResponseEntity.notFound().build());
 	}
 
 	@PostMapping
-	public ResponseEntity<Producto> createProducto(@RequestBody Producto producto) {
-		Producto productoGuardado = productoService.save(producto);
-		return ResponseEntity.status(HttpStatus.CREATED).body(productoGuardado);
+	public ResponseEntity<?> createProducto(@RequestBody @NonNull Producto producto) {
+		try {
+			Producto savedProducto = productoService.save(producto);
+			return ResponseEntity.status(HttpStatus.CREATED).body(savedProducto);
+		} catch (Exception ex) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body("Error creating product: " + ex.getMessage());
+		}
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<Producto> updateProducto(@PathVariable Long id, @RequestBody Producto producto) {
+	public ResponseEntity<Producto> updateProducto(@PathVariable @NonNull Long id,
+			@RequestBody @NonNull Producto producto) {
 		return productoService.findById(id)
-				.map(productoExistente -> {
+				.map(existing -> {
 					producto.setId(id);
-					Producto productoActualizado = productoService.save(producto);
-					return ResponseEntity.ok(productoActualizado);
+					return ResponseEntity.ok(productoService.save(producto));
 				})
 				.orElse(ResponseEntity.notFound().build());
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> deleteProducto(@PathVariable Long id) {
+	public ResponseEntity<Void> deleteProducto(@PathVariable @NonNull Long id) {
 		if (productoService.findById(id).isPresent()) {
 			productoService.deleteById(id);
 			return ResponseEntity.noContent().build();

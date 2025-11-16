@@ -1,0 +1,8 @@
+<div class="producto-card">
+  <img [src]="producto.imagenUrl" [alt]="producto.nombre" class="producto-img" />
+  <h3>{{ producto.nombre }}</h3>
+  <p>Precio: {{ producto.precio | currency:'USD':'symbol':'1.2-2' }}</p>
+  <div class="card-actions">
+    <button class="delete" (click)="eliminar()" [disabled]="deleting">{{ deleting ? 'Eliminando...' : 'Eliminar' }}</button>
+  </div>
+</div>
